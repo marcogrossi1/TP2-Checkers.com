@@ -43,7 +43,7 @@ header #logo {
     background-color: #000;
 }
 
-.peca {
+.peca-branca, .peca-preta {
     width: 45px;
 }
 

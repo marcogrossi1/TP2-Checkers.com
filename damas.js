@@ -13,13 +13,16 @@ let jogo = {
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
 const criaElemento = (i) => {
     let imgEl = document.createElement('img')
-    imgEl.classList.add('peca')
     
-    if(i < 15)
+    
+    if(i < 15) {
         imgEl.src = 'img/white.png'
-    
-    else
+        imgEl.classList.add('peca-branca')
+    }
+    else {
         imgEl.src = 'img/black.png'
+        imgEl.classList.add('peca-preta')
+    }
 
     casasEl[i].appendChild(imgEl)
 }
@@ -38,23 +41,48 @@ const selecionaPeca = (i) => {
         jogo.selecionado = casasEl[i]
         jogo.selecionado.classList.toggle('selecionado')
 
-        /* TENTANDO IMPLEMENTAR MARCAÇÕES PARA MOVIMENTOS PERMITIDOS
-        if(jogo.selecionado.children[0].src == "img/white.png")
-            jogo.movimentosPossiveis = [casasEl[i + 7], casasEl[i + 9]]
-
-        else if(jogo.selecionado.children[0].src == "img/black.png")
-            jogo.movimentosPossiveis = [casasEl[i - 7], casasEl[i - 9]]
-
-        jogo.movimentosPossiveis.forEach(jogo.movimentosPossiveis.classList.toggle('movimento-possivel'))
-        */
         for(let j = 0; j < casasEl.length; ++j)
             if(casasEl[j] != jogo.selecionado)
                 casasEl[j].classList.remove('selecionado')
         
-        if(jogo.selecionado.classList != 'casa preta selecionado')
+        atualizaMovimentosPossiveis(i)
+
+        if(jogo.selecionado.classList != 'casa preta selecionado') {
             jogo.selecionado = null
+            jogo.movimentosPossiveis = []
+        }
     }
 }
 
 for(let i = 0; i < casasEl.length; ++i)
     casasEl[i].addEventListener('click', () => selecionaPeca(i))
+
+// Criando movimentos possíveis
+
+const existePeca = (i) => {
+    if(casasEl[i].childElementCount == 1) {
+        return true
+    }
+
+    return false
+}
+
+const retornaCorPeca = (i) => {
+    if(existePeca(i) == true) {
+        let pecaEl = casasEl[i].children[0]
+        
+        if(pecaEl.classList == 'peca-preta')
+            return 'preta'
+        
+        else 
+            return 'branca'
+    }
+}
+
+const atualizaMovimentosPossiveis = (i) => {
+    if(retornaCorPeca(i) == 'branca')
+        jogo.movimentosPossiveis = [casasEl[i+7], casasEl[i+9]]
+
+    else if(retornaCorPeca(i) == 'preta')
+        jogo.movimentosPossiveis = [casasEl[i-9], casasEl[i-7]]
+}
