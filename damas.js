@@ -2,7 +2,7 @@ let tabuleiroEl = document.querySelector('#tabuleiro')
 let casasEl = document.querySelectorAll('.casa')
 
 let jogo = {
-    turno: 'white',
+    turno: 'branco',
     brancasFaltantes: 0,
     pretasFaltantes: 0,
     selecionado: null,
@@ -13,8 +13,7 @@ let jogo = {
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
 const criaElemento = (i) => {
     let imgEl = document.createElement('img')
-    
-    
+
     if(i < 15) {
         imgEl.src = 'img/white.png'
         imgEl.classList.add('peca-branca')
@@ -35,30 +34,7 @@ for(let i = 0; i < casasEl.length; ++i) {
         criaElemento(i);
 }
 
-// Criando seleção de peças
-const selecionaPeca = (i) => {
-    if(casasEl[i].childElementCount == 1) {
-        jogo.selecionado = casasEl[i]
-        jogo.selecionado.classList.toggle('selecionado')
-
-        for(let j = 0; j < casasEl.length; ++j)
-            if(casasEl[j] != jogo.selecionado)
-                casasEl[j].classList.remove('selecionado')
-        
-        atualizaMovimentosPossiveis(i)
-
-        if(jogo.selecionado.classList != 'casa preta selecionado') {
-            jogo.selecionado = null
-            jogo.movimentosPossiveis = []
-        }
-    }
-}
-
-for(let i = 0; i < casasEl.length; ++i)
-    casasEl[i].addEventListener('click', () => selecionaPeca(i))
-
 // Criando movimentos possíveis
-
 const existePeca = (i) => {
     if(casasEl[i].childElementCount == 1) {
         return true
@@ -80,9 +56,60 @@ const retornaCorPeca = (i) => {
 }
 
 const atualizaMovimentosPossiveis = (i) => {
-    if(retornaCorPeca(i) == 'branca')
-        jogo.movimentosPossiveis = [casasEl[i+7], casasEl[i+9]]
+    jogo.movimentosPossiveis.length = 0
 
-    else if(retornaCorPeca(i) == 'preta')
-        jogo.movimentosPossiveis = [casasEl[i-9], casasEl[i-7]]
+    if(retornaCorPeca(i) == 'branca') {
+        if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+7])
+        
+        if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+9])
+    }
+
+    else if(retornaCorPeca(i) == 'preta') {
+        if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-7])
+        
+        if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-9])
+    }
+}
+
+// Criando seleção de peças e aplicando "movimentos possíveis"
+const selecionaPeca = (i) => {
+    if(casasEl[i].childElementCount == 1) {
+        jogo.selecionado = casasEl[i]
+        jogo.selecionado.classList.toggle('selecionado')
+
+        atualizaMovimentosPossiveis(i)
+        console.log(jogo.movimentosPossiveis)
+
+        // Removendo outras seleções
+        for(let j = 0; j < casasEl.length; ++j)
+            if(casasEl[j] != jogo.selecionado)
+                casasEl[j].classList.remove('selecionado')
+
+        // Removendo outros quadradinhos marcados
+        for(let j = 0; j < casasEl.length; ++j)
+            casasEl[j].classList.remove('movimento-possivel')
+
+        // Caso haja a seleção da mesma casa, a casa é "desselecionada" e não existem movimentos possíveis
+        if(jogo.selecionado.classList == 'casa preta') {
+            jogo.movimentosPossiveis.length = 0
+            jogo.selecionado = null
+        }
+
+        // Adicionando cor aos movimentos possíveis
+        for(let i = 0; i < jogo.movimentosPossiveis.length; ++i)
+            jogo.movimentosPossiveis[i].classList.toggle('movimento-possivel')
+    }
+}
+
+for(let i = 0; i < casasEl.length; ++i)
+    casasEl[i].addEventListener('click', () => selecionaPeca(i))
+
+const movimentaPeca = (i) => {
+    if(jogo.turno == 'branco') {
+
+    }
 }
