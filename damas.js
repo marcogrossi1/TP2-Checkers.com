@@ -11,15 +11,15 @@ let jogo = {
 }
 
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
-const criaElemento = (i) => {
+const criaTabuleiro = (i) => {
     let imgEl = document.createElement('img')
 
     if(i < 15) {
-        imgEl.src = 'img/white.png'
+        imgEl.src = 'img/branca.png'
         imgEl.classList.add('peca-branca')
     }
     else {
-        imgEl.src = 'img/black.png'
+        imgEl.src = 'img/preta.png'
         imgEl.classList.add('peca-preta')
     }
 
@@ -28,10 +28,10 @@ const criaElemento = (i) => {
 
 for(let i = 0; i < casasEl.length; ++i) {
     if((i < 15) && (casasEl[i].classList == 'casa preta'))
-        criaElemento(i);
+        criaTabuleiro(i);
 
     else if((i > 48 && i < 63) && (casasEl[i].classList == 'casa preta'))
-        criaElemento(i);
+        criaTabuleiro(i);
 }
 
 // Criando movimentos possíveis
@@ -82,12 +82,11 @@ const selecionaPeca = (i) => {
         jogo.selecionado.classList.toggle('selecionado')
 
         atualizaMovimentosPossiveis(i)
-        console.log(jogo.movimentosPossiveis)
 
         // Removendo outras seleções
-        for(let j = 0; j < casasEl.length; ++j)
-            if(casasEl[j] != jogo.selecionado)
-                casasEl[j].classList.remove('selecionado')
+        for(let i = 0; i < casasEl.length; ++i)
+            if(casasEl[i] != jogo.selecionado)
+                casasEl[i].classList.remove('selecionado')
 
         // Removendo outros quadradinhos marcados
         for(let j = 0; j < casasEl.length; ++j)
@@ -105,11 +104,74 @@ const selecionaPeca = (i) => {
     }
 }
 
-for(let i = 0; i < casasEl.length; ++i)
-    casasEl[i].addEventListener('click', () => selecionaPeca(i))
+for(let i = 0; i < casasEl.length; ++i) {
+    casasEl[i].addEventListener('click', () => {
+        selecionaPeca(i)
+        movimentaPeca(i)
+    })
+}
+
+const removeSelecao = () => {
+    for(let i = 0; i < casasEl.length; ++i) {
+        casasEl[i].classList.remove('selecionado')
+        casasEl[i].classList.remove('movimento-possivel')
+    }
+
+    jogo.movimentosPossiveis.length = 0
+}
+
+const removeImagem = (i) => {
+    let img = casasEl[i].children[0]
+    img.remove()
+}
+
+const criaPeca = (e, corPeca) => {
+    let imgEl = document.createElement('img')
+    imgEl.src = `img/${corPeca}.png`
+    imgEl.classList.add(`peca-${corPeca}`)
+
+    e.appendChild(imgEl)
+}
 
 const movimentaPeca = (i) => {
-    if(jogo.turno == 'branco') {
+    if(jogo.turno == 'branco' && casasEl[i].children[0].classList == 'peca-branca') {
+        for(let j = 0; j < jogo.movimentosPossiveis.length; ++j)
+            jogo.movimentosPossiveis[j].addEventListener('click', (e) => {
 
+                    removeSelecao()
+                    removeImagem(i)
+                    criaPeca(e.currentTarget, `branca`)
+
+                    jogo.turno = 'preto'
+                })
+            }
+        
+
+    if(jogo.turno == 'preto' && casasEl[i].children[0].classList == 'peca-preta') {
+        for(let j = 0; j < jogo.movimentosPossiveis.length; ++j)
+            jogo.movimentosPossiveis[j].addEventListener('click', (e) => {
+                removeSelecao()
+                removeImagem(i)                
+                criaPeca(e.currentTarget, `preta`)
+
+                jogo.turno = 'branco'
+            })
     }
 }
+
+/*
+VEZ DO BRANCO
+if(jogo.turno == 'branco' && casasEl[i].children[0].classList == 'peca-branca') {
+    SE CLICAR EM UM DOS MOVIMENTOS POSSIVEIS:
+        1) Desseleciona todas as casas (fazer jogo.selecionado = null / jogo.movimentosPossiveis.length = 0)
+        2) Apaga a imagem na casa anterior (let imgApagar = casasEl[i].children[0] / imgApagar.remove())
+        3) Coloca a imagem na nova casa (jogo.movimentosPossiveis[clicado])
+
+VEZ DO PRETO
+if(jogo.turno == 'preto' && casasEl[i].children[0].classList == 'peca-preta') {
+    SE CLICAR EM UM DOS MOVIMENTOS POSSIVEIS:
+        1) Desseleciona todas as casas (fazer jogo.selecionado = null / jogo.movimentosPossiveis.length = 0)
+        2) Apaga a imagem na casa anterior (let imgApagar = casasEl[i].children[0] / imgApagar.remove())
+        3) Coloca a imagem na nova casa (jogo.movimentosPossiveis[clicado])
+
+*/
