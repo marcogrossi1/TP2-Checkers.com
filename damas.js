@@ -34,6 +34,15 @@ for(let i = 0; i < casasEl.length; ++i) {
         criaTabuleiro(i);
 }
 
+// Iniciando turnos e conta-peças
+let turnoEl = document.querySelector('#turno')
+let contaPretaEl = document.querySelector('#conta-preta')
+let contaBrancaEl = document.querySelector('#conta-branca')
+
+turnoEl.innerHTML = `Turno: ${jogo.turno}`
+contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
+contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+
 // Criando movimentos possíveis
 const existePeca = (i) => {
     if(casasEl[i].childElementCount == 1) {
@@ -77,20 +86,19 @@ const atualizaMovimentosPossiveis = (i) => {
 
 // Criando seleção de peças e aplicando "movimentos possíveis"
 const selecionaPeca = (i) => {
-    if(casasEl[i].childElementCount == 1) {
+    if(existePeca(i)) {
+        // SELECIONADO
+        removeSelecao()
+
+        // Adicionando cor à selecão
         jogo.selecionado = casasEl[i]
-        jogo.selecionado.classList.toggle('selecionado')
+        casasEl[i].classList.toggle('selecionado')
 
-        atualizaMovimentosPossiveis(i)
-
-        // Removendo outras seleções
-        for(let i = 0; i < casasEl.length; ++i)
-            if(casasEl[i] != jogo.selecionado)
-                casasEl[i].classList.remove('selecionado')
-
-        // Removendo outros quadradinhos marcados
+        // MOVIMENTOS POSSÍVEIS
         for(let j = 0; j < casasEl.length; ++j)
             casasEl[j].classList.remove('movimento-possivel')
+
+        atualizaMovimentosPossiveis(i)
 
         // Caso haja a seleção da mesma casa, a casa é "desselecionada" e não existem movimentos possíveis
         if(jogo.selecionado.classList == 'casa preta') {
@@ -102,13 +110,6 @@ const selecionaPeca = (i) => {
         for(let i = 0; i < jogo.movimentosPossiveis.length; ++i)
             jogo.movimentosPossiveis[i].classList.toggle('movimento-possivel')
     }
-}
-
-for(let i = 0; i < casasEl.length; ++i) {
-    casasEl[i].addEventListener('click', () => {
-        selecionaPeca(i)
-        movimentaPeca(i)
-    })
 }
 
 const removeSelecao = () => {
@@ -175,3 +176,13 @@ if(jogo.turno == 'preto' && casasEl[i].children[0].classList == 'peca-preta') {
         3) Coloca a imagem na nova casa (jogo.movimentosPossiveis[clicado])
 
 */
+
+for(let i = 0; i < casasEl.length; ++i) {
+    casasEl[i].addEventListener('click', () => {
+        // Se a casa selecionada for uma peça: classList.add('selecionado')
+        // Se a casa selecionada for um movimento possível: movimentar imagem, retirar imagem...
+        selecionaPeca(i)
+
+        movimentaPeca(i)
+    })
+}

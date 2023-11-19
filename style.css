@@ -14,10 +14,22 @@ header #logo {
     width: 9%;
 }
 
+main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+#info h4{
+    margin: 4px;
+}
+
 #tabuleiro {
     width: 400px;
     height: 400px;
-    margin: 20px auto;
+    margin: 20px;
 
     border: 1px solid black;
     display: grid;
