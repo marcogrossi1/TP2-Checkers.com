@@ -38,10 +38,12 @@ for(let i = 0; i < casasEl.length; ++i) {
 let turnoEl = document.querySelector('#turno')
 let contaPretaEl = document.querySelector('#conta-preta')
 let contaBrancaEl = document.querySelector('#conta-branca')
+let contadorMovimentos = document.querySelector('#conta-movimentos')
 
 turnoEl.innerHTML = `Turno: ${jogo.turno}`
 contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
 contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
 // Criando movimentos possíveis
 const existePeca = (i) => {
@@ -134,62 +136,87 @@ const criaPeca = (e, corPeca) => {
     e.appendChild(imgEl)
 }
 
+const capturaPeca = (indexPecaAtual, indexPecaOponente) => {
+        selecionaPeca(indexPecaAtual - indexPecaOponente)
+        
+        jogo.movimentosPossiveis.length = 0
+        for(let j = 0; j < casasEl.length; ++j)
+            casasEl[j].classList.remove('movimento-possivel')
+
+        jogo.movimentosPossiveis = [casasEl[indexPecaAtual + indexPecaOponente]]
+        jogo.movimentosPossiveis[0].classList.toggle('movimento-possivel')
+
+        console.log(jogo.movimentosPossiveis)
+
+        // Aplicando o conceito de recursividade para impedir que o usuário faça outro movimento que não a captura
+        for(let j = 0; j < casasEl.length; ++j)
+            casasEl[j].addEventListener('click', () => {
+                if(casasEl[j] != jogo.movimentosPossiveis[0])
+                    capturaPeca(indexPecaAtual, indexPecaOponente)
+        })
+}
+
 const movimentaPeca = (i) => {
-    //for(let j = 0; j < jogo.movimentosPossiveis; ++j) {
-        if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1]) {
-            if(jogo.turno == 'branco' && jogo.selecionado.children[0].classList == 'peca-branca') {
-                removeSelecao()
-                removeImagem(i)
-                criaPeca(casasEl[i], `branca`)
+    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1]) {
+        if(jogo.turno == 'branco' && jogo.selecionado.children[0].classList == 'peca-branca') {
+            removeSelecao()
+            removeImagem(i)
+            criaPeca(casasEl[i], `branca`)
+            
+            jogo.turno = 'preto'
+            jogo.contaMovimentos++
 
-                jogo.turno = 'preto'
+            turnoEl.innerHTML = `Turno: ${jogo.turno}`
+            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
+            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+            contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
-                turnoEl.innerHTML = `Turno: ${jogo.turno}`
-                contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
-                contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+            // Se, depois de feitas as mudanças, duas peças opostas se tocarem, será obrigatório a captura da peça
+            // Assim, será adicionado um if que fará a análise de todas as peças para checar se deverá haver captura
 
-                console.log(jogo.movimentosPossiveis)
+            /* 
+            
+                if(casasEl[i+7].childElementCount == 7 && casasEl[i+7].children[0].classList == 'peca-preta')
+                    if(casasEl[i+7+7].childElementCount == 0)
+
+            */
+        }
+        
+        else if(jogo.turno == 'preto' && jogo.selecionado.children[0].classList == 'peca-preta') {
+            removeSelecao()
+            removeImagem(i)                
+            criaPeca(casasEl[i], `preta`)
+            
+            jogo.turno = 'branco'
+            jogo.contaMovimentos++
+
+            turnoEl.innerHTML = `Turno: ${jogo.turno}`
+            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
+            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+            contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
+
+            console.log(i)
+
+            if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
+                if(casasEl[i+7].childElementCount == 0) {
+                    capturaPeca(i, 7)
+                }
             }
 
-            else if(jogo.turno == 'preto' && jogo.selecionado.children[0].classList == 'peca-preta') {
-                removeSelecao()
-                removeImagem(i)                
-                criaPeca(casasEl[i], `preta`)
-
-                jogo.turno = 'branco'
-
-                turnoEl.innerHTML = `Turno: ${jogo.turno}`
-                contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
-                contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
-
-                console.log(jogo.movimentosPossiveis)
+            else if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
+                if(casasEl[i+9].childElementCount == 0) {
+                    capturaPeca(i, 9)
+                }
             }
-        }   
-    }
-//}
-/*
-VEZ DO BRANCO
-if(jogo.turno == 'branco' && casasEl[i].children[0].classList == 'peca-branca') {
-    SE CLICAR EM UM DOS MOVIMENTOS POSSIVEIS:
-        1) Desseleciona todas as casas (fazer jogo.selecionado = null / jogo.movimentosPossiveis.length = 0)
-        2) Apaga a imagem na casa anterior (let imgApagar = casasEl[i].children[0] / imgApagar.remove())
-        3) Coloca a imagem na nova casa (jogo.movimentosPossiveis[clicado])
-
-VEZ DO PRETO
-if(jogo.turno == 'preto' && casasEl[i].children[0].classList == 'peca-preta') {
-    SE CLICAR EM UM DOS MOVIMENTOS POSSIVEIS:
-        1) Desseleciona todas as casas (fazer jogo.selecionado = null / jogo.movimentosPossiveis.length = 0)
-        2) Apaga a imagem na casa anterior (let imgApagar = casasEl[i].children[0] / imgApagar.remove())
-        3) Coloca a imagem na nova casa (jogo.movimentosPossiveis[clicado])
-
-*/
+        }
+    }   
+}
 
 for(let i = 0; i < casasEl.length; ++i) {
     casasEl[i].addEventListener('click', () => {
-        // Se a casa selecionada for uma peça: classList.add('selecionado')
-        // Se a casa selecionada for um movimento possível: movimentar imagem, retirar imagem...
-        selecionaPeca(i)
+            selecionaPeca(i)
+            movimentaPeca(i)
 
-        movimentaPeca(i)
+        //Adicionar a funcionalidade 'comer peças'
     })
 }
