@@ -137,6 +137,7 @@ const criaPeca = (e, corPeca) => {
 }
 
 const capturaPeca = (indexPecaAtual, indexPecaOponente) => {
+    //Adicionar teste para não capturar peças à borda do tabuleiro
         selecionaPeca(indexPecaAtual - indexPecaOponente)
         
         jogo.movimentosPossiveis.length = 0
