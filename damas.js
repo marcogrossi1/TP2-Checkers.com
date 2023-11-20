@@ -86,7 +86,7 @@ const atualizaMovimentosPossiveis = (i) => {
 
 // Criando seleção de peças e aplicando "movimentos possíveis"
 const selecionaPeca = (i) => {
-    if(existePeca(i)) {
+    if(casasEl[i].childElementCount == 1) {
         // SELECIONADO
         removeSelecao()
 
@@ -122,7 +122,7 @@ const removeSelecao = () => {
 }
 
 const removeImagem = (i) => {
-    let img = casasEl[i].children[0]
+    let img = jogo.selecionado.children[0]
     img.remove()
 }
 
@@ -135,31 +135,38 @@ const criaPeca = (e, corPeca) => {
 }
 
 const movimentaPeca = (i) => {
-    if(jogo.turno == 'branco' && casasEl[i].children[0].classList == 'peca-branca') {
-        for(let j = 0; j < jogo.movimentosPossiveis.length; ++j)
-            jogo.movimentosPossiveis[j].addEventListener('click', (e) => {
+    //for(let j = 0; j < jogo.movimentosPossiveis; ++j) {
+        if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1]) {
+            if(jogo.turno == 'branco' && jogo.selecionado.children[0].classList == 'peca-branca') {
+                removeSelecao()
+                removeImagem(i)
+                criaPeca(casasEl[i], `branca`)
 
-                    removeSelecao()
-                    removeImagem(i)
-                    criaPeca(e.currentTarget, `branca`)
+                jogo.turno = 'preto'
 
-                    jogo.turno = 'preto'
-                })
+                turnoEl.innerHTML = `Turno: ${jogo.turno}`
+                contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
+                contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+
+                console.log(jogo.movimentosPossiveis)
             }
-        
 
-    if(jogo.turno == 'preto' && casasEl[i].children[0].classList == 'peca-preta') {
-        for(let j = 0; j < jogo.movimentosPossiveis.length; ++j)
-            jogo.movimentosPossiveis[j].addEventListener('click', (e) => {
+            else if(jogo.turno == 'preto' && jogo.selecionado.children[0].classList == 'peca-preta') {
                 removeSelecao()
                 removeImagem(i)                
-                criaPeca(e.currentTarget, `preta`)
+                criaPeca(casasEl[i], `preta`)
 
                 jogo.turno = 'branco'
-            })
-    }
-}
 
+                turnoEl.innerHTML = `Turno: ${jogo.turno}`
+                contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
+                contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+
+                console.log(jogo.movimentosPossiveis)
+            }
+        }   
+    }
+//}
 /*
 VEZ DO BRANCO
 if(jogo.turno == 'branco' && casasEl[i].children[0].classList == 'peca-branca') {
