@@ -3,11 +3,16 @@ let casasEl = document.querySelectorAll('.casa')
 
 let jogo = {
     turno: 'branco',
-    brancasFaltantes: 0,
-    pretasFaltantes: 0,
+    brancasCapturadas: 0,
+    pretasCapturadas: 0,
     selecionado: null,
     movimentosPossiveis: [],
-    contaMovimentos: 0
+    contaMovimentos: 0,
+    captura: {
+        indexPecaCapturada: -1,
+        isTrue: false
+    },
+    vencedor: ''
 }
 
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
@@ -39,11 +44,13 @@ let turnoEl = document.querySelector('#turno')
 let contaPretaEl = document.querySelector('#conta-preta')
 let contaBrancaEl = document.querySelector('#conta-branca')
 let contadorMovimentos = document.querySelector('#conta-movimentos')
+let vitoriaBox = document.querySelector('#vitoria-box')
 
 turnoEl.innerHTML = `Turno: ${jogo.turno}`
-contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
-contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
+contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
 contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
+vitoriaBox.style.opacity = 0
 
 // Criando movimentos possíveis
 const existePeca = (i) => {
@@ -136,25 +143,40 @@ const criaPeca = (e, corPeca) => {
     e.appendChild(imgEl)
 }
 
-const capturaPeca = (indexPecaAtual, indexPecaOponente) => {
-    //Adicionar teste para não capturar peças à borda do tabuleiro
-        selecionaPeca(indexPecaAtual - indexPecaOponente)
+const selecionaCaptura = (indexPecaAtual, indexPecaOponente) => {
+    jogo.captura.indexPecaCapturada = indexPecaOponente
+
+    selecionaPeca(indexPecaAtual - indexPecaOponente)
         
-        jogo.movimentosPossiveis.length = 0
-        for(let j = 0; j < casasEl.length; ++j)
-            casasEl[j].classList.remove('movimento-possivel')
+    jogo.movimentosPossiveis.length = 0
+    for(let j = 0; j < casasEl.length; ++j)
+        casasEl[j].classList.remove('movimento-possivel')
 
-        jogo.movimentosPossiveis = [casasEl[indexPecaAtual + indexPecaOponente]]
-        jogo.movimentosPossiveis[0].classList.toggle('movimento-possivel')
+    jogo.movimentosPossiveis = [casasEl[indexPecaAtual + indexPecaOponente]]
+    jogo.movimentosPossiveis[0].classList.toggle('movimento-possivel')
 
-        console.log(jogo.movimentosPossiveis)
+    jogo.captura.isTrue = true
 
-        // Aplicando o conceito de recursividade para impedir que o usuário faça outro movimento que não a captura
-        for(let j = 0; j < casasEl.length; ++j)
-            casasEl[j].addEventListener('click', () => {
-                if(casasEl[j] != jogo.movimentosPossiveis[0])
-                    capturaPeca(indexPecaAtual, indexPecaOponente)
-        })
+    //casasEl[indexPecaAtual].children[0].remove()
+
+    // Aplicando o conceito de recursividade para impedir que o usuário faça outro movimento que não a captura
+    //for(let j = 0; j < casasEl.length; ++j)
+    //    casasEl[j].addEventListener('click', function myCallback () {
+    //        if(casasEl[j] != jogo.movimentosPossiveis[0])
+    //            selecionaCaptura(indexPecaAtual, indexPecaOponente)
+    //    })   
+}
+
+const capturaPeca = (indexPecaComida) => {
+    if(casasEl[indexPecaComida].children[0].classList == 'peca-preta')
+        jogo.pretasCapturadas++
+    else
+        jogo.brancasCapturadas++
+
+    casasEl[indexPecaComida].children[0].remove()
+
+    jogo.captura.isTrue = false
+    jogo.captura.indexPecaCapturada = -1
 }
 
 const movimentaPeca = (i) => {
@@ -168,19 +190,35 @@ const movimentaPeca = (i) => {
             jogo.contaMovimentos++
 
             turnoEl.innerHTML = `Turno: ${jogo.turno}`
-            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
-            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
-            // Se, depois de feitas as mudanças, duas peças opostas se tocarem, será obrigatório a captura da peça
-            // Assim, será adicionado um if que fará a análise de todas as peças para checar se deverá haver captura
+            if(casasEl[i+7].childElementCount == 1 && casasEl[i+7].children[0].classList == 'peca-preta') {
+                if(casasEl[i-7].childElementCount == 0 && casasEl[i-7].classList == 'casa preta')
+                    selecionaCaptura(i, -7)
+            }
 
-            /* 
-            
-                if(casasEl[i+7].childElementCount == 7 && casasEl[i+7].children[0].classList == 'peca-preta')
-                    if(casasEl[i+7+7].childElementCount == 0)
+            if(casasEl[i+9].childElementCount == 1 && casasEl[i+9].children[0].classList == 'peca-preta') {
+                if(casasEl[i-9].childElementCount == 0 && casasEl[i-9].classList == 'casa preta')
+                    selecionaCaptura(i, -9)
+            }
 
-            */
+
+            //for(let j = 0; j < casasEl.length; ++j) {
+            //    if(casasEl[j].childElementCount == 1 && casasEl[j].children[0].classList == 'peca-branca') {
+            //        if(casasEl[j+7].childElementCount == 1 && casasEl[j+7].children[0].classList == 'peca-preta') {
+            //            if(casasEl[j-7].childElementCount == 0 && casasEl[j-7].classList == 'casa preta')
+            //                selecionaCaptura(j + 7, 7)
+            //        }
+            //        else if(casasEl[j+9].childElementCount == 1 && casasEl[j+9].children[0].classList == 'peca-preta') {
+            //            if(casasEl[j-9].childElementCount == 0 && casasEl[j-9].classList == 'casa preta') {
+            //                selecionaCaptura(j + 9, 9)
+            //                console.log('legal')
+            //            }
+            //        }
+            //    }
+            //}
         }
         
         else if(jogo.turno == 'preto' && jogo.selecionado.children[0].classList == 'peca-preta') {
@@ -192,32 +230,47 @@ const movimentaPeca = (i) => {
             jogo.contaMovimentos++
 
             turnoEl.innerHTML = `Turno: ${jogo.turno}`
-            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasFaltantes}`
-            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasFaltantes}`
+            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
-            console.log(i)
-
             if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
-                if(casasEl[i+7].childElementCount == 0) {
-                    capturaPeca(i, 7)
+                if(casasEl[i+7].childElementCount == 0 && casasEl[i+7].classList == 'casa preta') {
+                    selecionaCaptura(i, 7)
                 }
-            }
+            }   
 
             else if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
-                if(casasEl[i+9].childElementCount == 0) {
-                    capturaPeca(i, 9)
+                if(casasEl[i+9].childElementCount == 0 && casasEl[i+9].classList == 'casa preta') {
+                    selecionaCaptura(i, 9)
                 }
             }
+            
         }
-    }   
+    }
 }
 
 for(let i = 0; i < casasEl.length; ++i) {
     casasEl[i].addEventListener('click', () => {
-            selecionaPeca(i)
-            movimentaPeca(i)
+        if(jogo.captura.isTrue == true)
+            capturaPeca(i-jogo.captura.indexPecaCapturada)    
+        
+        selecionaPeca(i)
+        movimentaPeca(i)
 
-        //Adicionar a funcionalidade 'comer peças'
+        if(jogo.brancasCapturadas == 8) {
+            jogo.vencedor = 'preto'
+            
+            vitoriaBox.style.opacity = 1
+            let timeVencedor = document.querySelector('#time-vencedor')
+            timeVencedor.innerHTML = jogo.vencedor
+        }
+        else if(jogo.pretasCapturadas == 8) {
+            jogo.vencedor = 'branco'
+
+            vitoriaBox.style.opacity = 1
+            let timeVencedor = document.querySelector('#time-vencedor')
+            timeVencedor.innerHTML = jogo.vencedor
+        }
     })
 }
