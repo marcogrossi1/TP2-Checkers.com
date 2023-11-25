@@ -1,8 +1,48 @@
 let tabuleiroEl = document.querySelector('#tabuleiro')
+let loginEl = document.querySelector('#login')
+let infoEl = document.querySelector('#info')
+let botaoJogarEl = document.querySelector('#botao-jogar')
+
+tabuleiroEl.classList.add('desativado')
+tabuleiroEl.style.display = 'none'
+infoEl.classList.add('desativado')
+
+let jogador1El = document.querySelector('#jogador1-elemento')
+let jogador2El = document.querySelector('#jogador2-elemento')
+
+// Criando a opção 'cadastro', que registrará o nome dos jogadores em um sessionStorage
+botaoJogarEl.addEventListener('click', () => {
+    let jogador1 = document.querySelector('#jogador1')
+    let jogador2 = document.querySelector('#jogador2')
+
+    sessionStorage.setItem('jogador1', jogador1.value)
+    sessionStorage.setItem('jogador2', jogador2.value)
+    
+    loginEl.classList.add('desativado')
+    loginEl.style.display = 'none'
+    
+    tabuleiroEl.classList.remove('desativado')
+    tabuleiroEl.style.display = ''
+    infoEl.classList.remove('desativado')
+
+    jogador1El.classList.remove('desativado')
+    jogador2El.classList.remove('desativado')
+})
+
+jogador1El.innerHTML = `<h3>${sessionStorage.getItem('jogador1')}</h3>`
+jogador2El.innerHTML = `<h3>${sessionStorage.getItem('jogador2')}</h3>`
+
+let botaoJogarNovamenteEl = document.querySelector('#jogar-novamente')
+
+botaoJogarNovamenteEl.addEventListener('click', () => {
+    location.reload()
+})
+
+// Implementação do jogo
 let casasEl = document.querySelectorAll('.casa')
 
 let jogo = {
-    turno: 'branco',
+    turno: 'branca',
     brancasCapturadas: 0,
     pretasCapturadas: 0,
     selecionado: null,
@@ -50,9 +90,9 @@ let contaBrancaEl = document.querySelector('#conta-branca')
 let contadorMovimentos = document.querySelector('#conta-movimentos')
 let vitoriaBox = document.querySelector('#vitoria-box')
 
-turnoEl.innerHTML = `Turno: ${jogo.turno}`
-contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
-contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
+turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
+contaBrancaEl.innerHTML = `<img src='img/branca.png' width = 30px>: ${jogo.brancasCapturadas}`
+contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
 contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 vitoriaBox.style.opacity = 0
 
@@ -185,17 +225,17 @@ const capturaPeca = (indexPecaComida) => {
 
 const movimentaPeca = (i) => {
     if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1]) {
-        if(jogo.turno == 'branco' && jogo.selecionado.children[0].classList == 'peca-branca') {
+        if(jogo.turno == 'branca' && jogo.selecionado.children[0].classList == 'peca-branca') {
             removeSelecao()
             removeImagem(i)
             criaPeca(casasEl[i], `branca`)
             
-            jogo.turno = 'preto'
+            jogo.turno = 'preta'
             jogo.contaMovimentos++
 
-            turnoEl.innerHTML = `Turno: ${jogo.turno}`
-            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
-            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
+            turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
+            contaBrancaEl.innerHTML = `<img src='img/branca.png' width = 30px>: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
             if(i < 63-7)
@@ -227,17 +267,17 @@ const movimentaPeca = (i) => {
             //}
         }
         
-        else if(jogo.turno == 'preto' && jogo.selecionado.children[0].classList == 'peca-preta') {
+        else if(jogo.turno == 'preta' && jogo.selecionado.children[0].classList == 'peca-preta') {
             removeSelecao()
             removeImagem(i)                
             criaPeca(casasEl[i], `preta`)
             
-            jogo.turno = 'branco'
+            jogo.turno = 'branca'
             jogo.contaMovimentos++
 
-            turnoEl.innerHTML = `Turno: ${jogo.turno}`
-            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
-            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
+            turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
+            contaBrancaEl.innerHTML = `<img src='img/branca.png' width = 30px>: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
             if(i > 0 + 7)
@@ -295,16 +335,34 @@ const movimentaDama = (i) => {
 
             criaPeca(casasEl[i], `blackdama`)
 
-            jogo.turno = 'branco'
+            jogo.turno = 'branca'
             jogo.contaMovimentos++
 
-            turnoEl.innerHTML = `Turno: ${jogo.turno}`
-            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
-            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
+            turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
+            contaBrancaEl.innerHTML = `<img src='img/brnca.png' width = 30px>: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
         }
     }
+}
+
+const exibeVencedor = (vencedor) => {
+    jogo.vencedor = vencedor
+
+    vitoriaBox.classList.remove('desativado')
+    vitoriaBox.style.display = 'inline'
+    vitoriaBox.style.opacity = 1
+
+    let timeVencedor = document.querySelector('#time-vencedor')
+    let jogadorVencedor = (vencedor == 'preta') ? 'jogador2' : 'jogador1'
+    timeVencedor.innerHTML = sessionStorage.getItem(jogadorVencedor) + `<img src='img/${jogo.vencedor}.png' width = 45px>` + ' venceu!!!'
+
+    tabuleiroEl.classList.add('desativado')
+    tabuleiroEl.style.display = 'none'
+    infoEl.classList.add('desativado')
+    jogador1El.classList.add('desativado')
+    jogador2El.classList.add('desativado')
 }
 
 for(let i = 0; i < casasEl.length; ++i) {
@@ -316,35 +374,16 @@ for(let i = 0; i < casasEl.length; ++i) {
         movimentaPeca(i)
 
         if(jogo.brancasCapturadas == 8) {
-            jogo.vencedor = 'preto'
-            
-            vitoriaBox.style.opacity = 1
-            let timeVencedor = document.querySelector('#time-vencedor')
-            timeVencedor.innerHTML = jogo.vencedor
+            exibeVencedor('preta')
         }
 
         else if(jogo.pretasCapturadas == 8) {
-            jogo.vencedor = 'branco'
-
-            vitoriaBox.style.opacity = 1
-            let timeVencedor = document.querySelector('#time-vencedor')
-            timeVencedor.innerHTML = jogo.vencedor
+            exibeVencedor('branca')
         }
 
         // Iniciando a implementação da peça 'dama'
         criaDama(i)
         atualizaMovimentosPossiveisDama(i)
         movimentaDama(i)
-
-        sessionStorage.setItem('organizacao-do-jogo', casasEl)
     })
 }
-
-//Iniciando a implementação do botão 'volta lance', tentando utilizar webStorage
-let saveTabuleiro = sessionStorage.getItem('organizacao-do-jogo')
-
-let botaoVoltaLance = document.querySelector('#volta-lance')
-
-botaoVoltaLance.addEventListener('click', () => {
-    console.log(saveTabuleiro[1])
-})

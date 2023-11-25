@@ -14,6 +14,13 @@
     </header>
 
     <main>
+        <section id="login">
+            <h2>Cadastro</h2>
+            <label>Jogador 1: <input type="text" placeholder="Nome" id="jogador1"></label>
+            <label>Jogador 2: <input type="text" placeholder="Nome" id="jogador2"></label>
+            <button id="botao-jogar">Jogar</button>
+        </section>
+        <div id="jogador1-elemento" class="desativado"></div>
         <section id="tabuleiro">
             <div class="casa branca"></div>
             <div class="casa preta"></div>
@@ -87,17 +94,16 @@
             <div class="casa preta"></div>
             <div class="casa branca"></div>
         </section>
+        <div id="jogador2-elemento" class="desativado"></div>
         <section id="info">
-            <h2 id="explicado"></h2>
             <h4 id="turno"></h4>
             <h4 id="conta-branca"></h4>
             <h4 id="conta-preta"></h4>
             <h4 id="conta-movimentos"></h4>
-            <button id="volta-lance">VOLTA</button>
         </section>
         <section id="vitoria-box" class="desativado">
-            <h2>O time <span id="time-vencedor"></span> venceu!!!</h2>
-
+            <h2><span id="time-vencedor"></span></h2>
+            <button id="jogar-novamente">Jogar novamente</button>
         </section>
     </main>
     <script src="damas.js"></script>
