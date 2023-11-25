@@ -23,6 +23,10 @@ botaoJogarEl.addEventListener('click', () => {
 
     sessionStorage.setItem('jogador1', jogador1.value)
     sessionStorage.setItem('jogador2', jogador2.value)
+
+    
+    jogador1El.innerHTML = `<h3>${sessionStorage.getItem('jogador1')}</h3>`
+    jogador2El.innerHTML = `<h3>${sessionStorage.getItem('jogador2')}</h3>`
     
     loginEl.classList.add('desativado')
     loginEl.style.display = 'none'
@@ -35,8 +39,6 @@ botaoJogarEl.addEventListener('click', () => {
     jogador2El.classList.remove('desativado')
 })
 
-jogador1El.innerHTML = `<h3>${sessionStorage.getItem('jogador1')}</h3>`
-jogador2El.innerHTML = `<h3>${sessionStorage.getItem('jogador2')}</h3>`
 
 let botaoJogarNovamenteEl = document.querySelector('#jogar-novamente')
 
@@ -385,6 +387,9 @@ const movimentaDama = (i) => {
 }
 
 const exibeVencedor = (vencedor) => {
+    let audio = new Audio('audio/vitoria1.mp3')
+    audio.play()
+    
     jogo.vencedor = vencedor
 
     vitoriaBox.classList.remove('desativado')
