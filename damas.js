@@ -331,9 +331,20 @@ for(let i = 0; i < casasEl.length; ++i) {
             timeVencedor.innerHTML = jogo.vencedor
         }
 
-        // Iniciando a implementação da peça 'dama'g
+        // Iniciando a implementação da peça 'dama'
         criaDama(i)
         atualizaMovimentosPossiveisDama(i)
         movimentaDama(i)
+
+        sessionStorage.setItem('organizacao-do-jogo', casasEl)
     })
 }
+
+//Iniciando a implementação do botão 'volta lance', tentando utilizar webStorage
+let saveTabuleiro = sessionStorage.getItem('organizacao-do-jogo')
+
+let botaoVoltaLance = document.querySelector('#volta-lance')
+
+botaoVoltaLance.addEventListener('click', () => {
+    console.log(saveTabuleiro[1])
+})
