@@ -11,6 +11,8 @@
     <header>
         <img src="img/logo.png" alt="Logo do site" id="logo">
         <h1>Checkers.com</h1>
+        <img src="img/config.png" alt="Configurações" id="config">
+        <img src="img/sobre.png" alt="Sobre" id="sobre">
     </header>
 
     <main>
@@ -104,6 +106,71 @@
         <section id="vitoria-box" class="desativado">
             <h2><span id="time-vencedor"></span></h2>
             <button id="jogar-novamente">Jogar novamente</button>
+        </section>
+        <section id="sobre-autores">
+            <h2>Sobre os autores</h2>
+            <p id="botao-fechar">Fechar</p>
+            <article class="autor">
+                <img src="img/autores/autor_marco.jpeg" class="img-autor">
+                <a href="http://lattes.cnpq.br/8533372588419611" target="_blank"><img src="img/autores/curriculum.png" class="curriculo"></a>
+                <a href="https://www.linkedin.com/in/marcoaraujogrossi/" target="_blank"><img src="img/autores/linkedin.png" class="curriculo"></a>
+                <a href="https://github.com/marcogrossi1" target="_blank"><img src="img/autores/github.png" class="curriculo"></a>
+                <h2>Marco Antônio A. Grossi</h2>
+                <p>
+                    Estudante no primeiro ano do curso Técnico em Informática no Cefet-MG.
+                </p>
+                <p>
+                    Participo de diversas olimpíadas do conhecimento de nível nacional nas áreas de matemática, astronomia, 
+                    informática e geografia.
+                </p>
+                <p>
+                    Atualmente sou bolsista do 'Programa Institucional de Bolsas de Iniciação Científica Júnior' (PIBIC - Jr) 
+                    trabalhando no Departamento de Modelagem Matemática Computacional (DMMC) fazendo pesquisas e desenvolvendo 
+                    modelos computacionais para prever características mecânicas do concreto. A previsão é feita com base nos 
+                    conceitos de Machine Learning, Inteligência Artificial, RNA, Floresta Aleatória, Árvore de Decisões, entre 
+                    outros. A IA que meu grupo de pesquisa desenvolve é programada em Python e usa um conjunto de dados de ensaios 
+                    científicos sobre concreto e seus aspectos mecânicos.
+                </p>
+            </article>
+            <article class="autor">
+                <img src="img/autores/autor_luiz.jpeg" class="img-autor">
+                <a href="https://github.com/LuizFernandoRMV" target="_blank"><img src="img/autores/github.png" class="curriculo"></a>
+                <h2>Luiz Fernando Veríssimo</h2>
+                <p>
+                    Estudante no primeiro ano do curso Técnico em Informática no Cefet-MG.
+                </p>
+                <p>
+                    Tenho um grande interesse quando se trata de filosofia, gosto de ler,  jogar jogos(como league of legends :< ),
+                    praticar esportes como vôlei. Já trabalhei em um projeto para um Jam, um jogo chamado Rod Adventures. Ultimamente
+                    venho trabalhando em um projeto com alguns amigos, desenvolvendo um jogo estilo rpg. Espero continuar trabalhando
+                    e finalmente lançar meus projetos em andamento.
+                </p>
+            </article>
+            <article class="autor">
+                <img src="img/autores/autor_matheus.jpeg" class="img-autor">
+                <a href="https://github.com/Matheusss11" target="_blank"><img src="img/autores/github.png" class="curriculo"></a>
+                <h2>Matheus Gabriel Tavares Campos</h2>
+                <p>
+                    Fala rapeize! Eu sou o Matheus, estudo no Cefet-MG e, no meu tempo livre gosto de jogar uns games,
+                    sair com meus friends e jogar futebol (obs.: sou bem melhor q o Marco). Sou membro oficial do fan club do 
+                    Neymar Junior (eu fundei!).
+                </p>
+            </article>
+            <p id="botao-fechar">Fechar</p>
+        </section>
+        <section id="configuracoes">
+            <h2>Configurações</h2>
+            <p id="botao-fechar">Fechar</p>            
+            <label>Tabuleiro
+                <select id="board-color">
+                    <option value="#00000067">Cinza</option>
+                    <option value="#000000">Preto</option>
+                    <option value="#bee2af">Verde</option>
+                    <option value="#b59c8a">Marrom</option>
+                    <option value="#bbc7e8">Azul</option>
+                </select>
+            </label>
+            <p id="botao-fechar">Fechar</p>
         </section>
     </main>
     <script src="damas.js"></script>

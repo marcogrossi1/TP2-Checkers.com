@@ -3,9 +3,15 @@ let loginEl = document.querySelector('#login')
 let infoEl = document.querySelector('#info')
 let botaoJogarEl = document.querySelector('#botao-jogar')
 
+let sobreEl = document.querySelector('#sobre-autores')
+let configEl = document.querySelector('#configuracoes')
+
 tabuleiroEl.classList.add('desativado')
 tabuleiroEl.style.display = 'none'
 infoEl.classList.add('desativado')
+sobreEl.classList.add('desativado')
+sobreEl.style.display = 'none'
+configEl.classList.add('desativado')
 
 let jogador1El = document.querySelector('#jogador1-elemento')
 let jogador2El = document.querySelector('#jogador2-elemento')
@@ -36,6 +42,37 @@ let botaoJogarNovamenteEl = document.querySelector('#jogar-novamente')
 
 botaoJogarNovamenteEl.addEventListener('click', () => {
     location.reload()
+})
+
+let botaoSobreEl = document.querySelector('#sobre')
+let botaoFecharEl = document.querySelectorAll('#botao-fechar')
+
+botaoSobreEl.addEventListener('click', () => {
+    sobreEl.classList.remove('desativado')
+    sobreEl.style.display = ''
+})
+
+for(let i = 0; i < botaoFecharEl.length; ++i)
+    botaoFecharEl[i].addEventListener('click', () => {
+        sobreEl.classList.add('desativado')
+        sobreEl.style.display = 'none'
+
+        configEl.classList.add('desativado')
+    })
+
+// Implementando escolha de tabuleiro
+let botaoConfigEl = document.querySelector('#config')
+
+botaoConfigEl.addEventListener('click', () => {
+    configEl.classList.toggle('desativado')
+})
+
+let corTabuleiroInput = document.querySelector('#board-color')
+
+corTabuleiroInput.addEventListener('change', () => {
+    for(let i = 0; i < casasEl.length; ++i)
+        if(casasEl[i].classList == 'casa preta')
+            casasEl[i].style.backgroundColor = corTabuleiroInput.value
 })
 
 // Implementação do jogo
