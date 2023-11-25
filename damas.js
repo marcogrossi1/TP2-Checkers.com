@@ -12,7 +12,11 @@ let jogo = {
         indexPecaCapturada: -1,
         isTrue: false
     },
-    vencedor: ''
+    vencedor: '',
+    dama: {
+        pretas: [],
+        brancas: []
+    }
 }
 
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
@@ -194,11 +198,13 @@ const movimentaPeca = (i) => {
             contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
+            if(i < 63-7)
             if(casasEl[i+7].childElementCount == 1 && casasEl[i+7].children[0].classList == 'peca-preta') {
                 if(casasEl[i-7].childElementCount == 0 && casasEl[i-7].classList == 'casa preta')
                     selecionaCaptura(i, -7)
             }
 
+            if(i < 63-9)
             if(casasEl[i+9].childElementCount == 1 && casasEl[i+9].children[0].classList == 'peca-preta') {
                 if(casasEl[i-9].childElementCount == 0 && casasEl[i-9].classList == 'casa preta')
                     selecionaCaptura(i, -9)
@@ -234,18 +240,69 @@ const movimentaPeca = (i) => {
             contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
+            if(i > 0 + 7)
             if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
                 if(casasEl[i+7].childElementCount == 0 && casasEl[i+7].classList == 'casa preta') {
                     selecionaCaptura(i, 7)
                 }
             }   
 
-            else if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
+            if(i > 0 + 9)
+            if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
                 if(casasEl[i+9].childElementCount == 0 && casasEl[i+9].classList == 'casa preta') {
                     selecionaCaptura(i, 9)
                 }
             }
             
+        }
+    }
+}
+
+const criaDama = (i) => {
+    if(i == 1 || i == 3 || i == 5 || i ==7)
+        if(casasEl[i].children[0].classList == 'peca-preta') {
+            casasEl[i].children[0].src = 'img/blackdama.png'
+            casasEl[i].children[0].classList.add('dama')
+
+            jogo.dama.pretas.push(casasEl[i])
+        }
+
+    if(i == 62 || i == 60 || i == 58 || i == 56)
+        if(jogo.selecionado.children[0].classList == 'peca-branca') {
+            casasEl[i].children[0].src = `img/whitedama.png`
+            casasEl[i].children[0].style.width = '50px'
+            casasEl[i].children[0].classList.add('dama')
+
+            jogo.dama.brancas.push(casasEl[i])
+        }
+}
+
+const atualizaMovimentosPossiveisDama = (i) => {
+    if(casasEl[i].children[0].classList == 'peca-preta dama') {
+        jogo.movimentosPossiveis = [casasEl[i + 7], casasEl[i + 9]]
+    }
+
+    else if(casasEl[i].children[0].classList == 'peca-branca dama') {
+        jogo.movimentosPossiveis = [casasEl[i - 7], casasEl[i - 9]]
+    }
+}
+
+const movimentaDama = (i) => {
+    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1] || casasEl[i] == jogo.movimentosPossiveis[2] || casasEl[i] == jogo.movimentosPossiveis[3]) {
+        if(jogo.selecionado.children[0].classList == 'peca-preta dama') {
+            removeSelecao()
+            removeImagem()
+
+            criaPeca(casasEl[i], `blackdama`)
+
+            jogo.turno = 'branco'
+            jogo.contaMovimentos++
+
+            turnoEl.innerHTML = `Turno: ${jogo.turno}`
+            contaBrancaEl.innerHTML = `Brancas: ${jogo.brancasCapturadas}`
+            contaPretaEl.innerHTML = `Pretas: ${jogo.pretasCapturadas}`
+            contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
+
         }
     }
 }
@@ -265,6 +322,7 @@ for(let i = 0; i < casasEl.length; ++i) {
             let timeVencedor = document.querySelector('#time-vencedor')
             timeVencedor.innerHTML = jogo.vencedor
         }
+
         else if(jogo.pretasCapturadas == 8) {
             jogo.vencedor = 'branco'
 
@@ -272,5 +330,10 @@ for(let i = 0; i < casasEl.length; ++i) {
             let timeVencedor = document.querySelector('#time-vencedor')
             timeVencedor.innerHTML = jogo.vencedor
         }
+
+        // Iniciando a implementação da peça 'dama'g
+        criaDama(i)
+        atualizaMovimentosPossiveisDama(i)
+        movimentaDama(i)
     })
 }

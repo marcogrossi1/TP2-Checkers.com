@@ -72,3 +72,7 @@ main {
     background-color: rgb(109, 236, 158);
     opacity: 0.6;
 }
+
+.dama {
+    width: 50px;
+}
