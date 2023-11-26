@@ -25,8 +25,9 @@ botaoJogarEl.addEventListener('click', () => {
     sessionStorage.setItem('jogador2', jogador2.value)
 
     
-    jogador1El.innerHTML = `<h3>${sessionStorage.getItem('jogador1')}</h3>`
-    jogador2El.innerHTML = `<h3>${sessionStorage.getItem('jogador2')}</h3>`
+    jogador1El.innerHTML = `<h3>${sessionStorage.getItem('jogador1')}<img src="img/abandonar.png" id="abandonar"></h3>`
+
+    jogador2El.innerHTML = `<h3>${sessionStorage.getItem('jogador2')}<img src="img/abandonar.png" id="abandonar"></h3>`
     
     loginEl.classList.add('desativado')
     loginEl.style.display = 'none'
@@ -37,8 +38,14 @@ botaoJogarEl.addEventListener('click', () => {
 
     jogador1El.classList.remove('desativado')
     jogador2El.classList.remove('desativado')
-})
 
+    
+    let botaoAbandonarEl = document.querySelectorAll('#abandonar')
+
+    for(let i = 0; i < botaoAbandonarEl.length; ++i)
+        botaoAbandonarEl[i].addEventListener('click', () => (i == 0) ? exibeVencedor('preta') : exibeVencedor('branca'))
+    
+})
 
 let botaoJogarNovamenteEl = document.querySelector('#jogar-novamente')
 
@@ -173,57 +180,155 @@ const atualizaMovimentosPossiveis = (i) => {
     jogo.movimentosPossiveis.length = 0
 
     if(retornaCorPeca(i) == 'branca') {
-        if(i < 63-7)
+        if(i < 63-7) {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
-            
         
+        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
+            if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+14])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = 7
+            }
+        }
+
+        if(i < 63-9) {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])
+
+        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
+            if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+18])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = 9
+            }
+        }
     }
 
     else if(retornaCorPeca(i) == 'preta') {
+        if(i > 0 + 7) {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
         
+        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
+            if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-14])
+                    jogo.captura.isTrue = true
+                    jogo.captura.indexPecaCapturada = -7
+            }
+        }
+
+        if(i > 0 + 9) {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
+
+        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
+            if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-18])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = -9
+            }
+        }
     }
 
     else if(retornaCorPeca(i) == 'blackdama') {
-        if(i > 0 + 7)
+        if(i > 0 + 7) {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
-        
-        if(i > 0 + 9)
+
+        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
+            if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-14])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = -7
+            }
+        }
+
+        if(i > 0 + 9) {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
 
-        if(i < 63-7)
+        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
+            if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-18])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = -9
+            }
+        }
+
+        if(i < 63-7) {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
         
-        if(i < 63-9)
+        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'branca' || retornaCorPeca(i+7) == 'whitedama'))
+            if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+14])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = 7
+            }
+        }
+
+        if(i < 63-9) {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])    
+
+        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'branca' || retornaCorPeca(i+9) == 'whitedama'))
+            if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+18])
+                    jogo.captura.isTrue = true
+                    jogo.captura.indexPecaCapturada = 9
+            }
+        }
     }
 
     else if(retornaCorPeca(i) == 'whitedama') {
-        if(i > 0 + 7)
+        if(i > 0 + 7) {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
-        
-        if(i > 0 + 9)
+
+        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'preta' || retornaCorPeca(i-7) == 'blackdama'))
+            if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-14])
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = -7
+            }
+        }
+
+        if(i > 0 + 9) {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
-        
-        if(i < 63-7)
+
+        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'preta' || retornaCorPeca(i-9) == 'blackdama'))
+            if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i-18]) 
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = -9
+            }
+        }
+
+        if(i < 63-7) {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
         
-        if(i < 63-9)
+        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
+            if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+14])
+                    jogo.captura.isTrue = true
+                    jogo.captura.indexPecaCapturada = 7
+                }
+        }
+
+        if(i < 63-9) {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])    
+
+        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
+            if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
+                jogo.movimentosPossiveis.push(casasEl[i+18]) 
+                jogo.captura.isTrue = true
+                jogo.captura.indexPecaCapturada = 9
+            }
+        }
     }
 }
 
@@ -290,9 +395,9 @@ const criaPeca = (e, corPeca) => {
 }
 
 const selecionaCaptura = (indexPecaAtual, indexPecaOponente) => {
-    jogo.captura.indexPecaCapturada = indexPecaOponente
+    //jogo.captura.indexPecaCapturada = indexPecaOponente
 
-    selecionaPeca(indexPecaAtual - indexPecaOponente)
+    selecionaPeca(indexPecaAtual)
         
     jogo.movimentosPossiveis.length = 0
     for(let j = 0; j < casasEl.length; ++j)
@@ -302,24 +407,17 @@ const selecionaCaptura = (indexPecaAtual, indexPecaOponente) => {
     jogo.movimentosPossiveis[0].classList.toggle('movimento-possivel')
 
     jogo.captura.isTrue = true
-
-    //casasEl[indexPecaAtual].children[0].remove()
-
-    // Aplicando o conceito de recursividade para impedir que o usuário faça outro movimento que não a captura
-    //for(let j = 0; j < casasEl.length; ++j)
-    //    casasEl[j].addEventListener('click', function myCallback () {
-    //        if(casasEl[j] != jogo.movimentosPossiveis[0])
-    //            selecionaCaptura(indexPecaAtual, indexPecaOponente)
-    //    })   
 }
 
 const capturaPeca = (indexPecaComida) => {
-    if(casasEl[indexPecaComida].children[0].classList == 'peca-preta')
-        jogo.pretasCapturadas++
-    else
-        jogo.brancasCapturadas++
-
-    casasEl[indexPecaComida].children[0].remove()
+    if(casasEl[indexPecaComida].childElementCount == 1) {
+        if(casasEl[indexPecaComida].children[0].classList == 'peca-preta' || casasEl[indexPecaComida].children[0].classList == 'peca-preta dama')
+            jogo.pretasCapturadas++
+        else
+            jogo.brancasCapturadas++
+        
+        casasEl[indexPecaComida].children[0].remove()
+    }
 
     jogo.captura.isTrue = false
     jogo.captura.indexPecaCapturada = -1
@@ -347,17 +445,21 @@ const movimentaPeca = (i) => {
             contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
-            if(i < 63-7)
-            if(casasEl[i+7].childElementCount == 1 && casasEl[i+7].children[0].classList == 'peca-preta') {
-                if(casasEl[i-7].childElementCount == 0 && casasEl[i-7].classList == 'casa preta')
-                    selecionaCaptura(i, -7)
-            }
+            if(jogo.captura.isTrue == true)
+                selecionaCaptura(i, jogo.captura.indexPecaCapturada)
 
-            if(i < 63-9)
-            if(casasEl[i+9].childElementCount == 1 && casasEl[i+9].children[0].classList == 'peca-preta') {
-                if(casasEl[i-9].childElementCount == 0 && casasEl[i-9].classList == 'casa preta')
-                    selecionaCaptura(i, -9)
-            }
+
+            //if(i < 63-7)
+            //if(casasEl[i+7].childElementCount == 1 && casasEl[i+7].children[0].classList == 'peca-preta') {
+            //    if(casasEl[i-7].childElementCount == 0 && casasEl[i-7].classList == 'casa preta')
+            //        selecionaCaptura(i, -7)
+            //}
+//
+            //if(i < 63-9)
+            //if(casasEl[i+9].childElementCount == 1 && casasEl[i+9].children[0].classList == 'peca-preta') {
+            //    if(casasEl[i-9].childElementCount == 0 && casasEl[i-9].classList == 'casa preta')
+            //        selecionaCaptura(i, -9)
+            //}
 
 
             //for(let j = 0; j < casasEl.length; ++j) {
@@ -395,19 +497,22 @@ const movimentaPeca = (i) => {
             contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
-            if(i > 0 + 7)
-            if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
-                if(casasEl[i+7].childElementCount == 0 && casasEl[i+7].classList == 'casa preta') {
-                    selecionaCaptura(i, 7)
-                }
-            }   
+            if(jogo.captura.isTrue == true)
+                selecionaCaptura(i, jogo.captura.indexPecaCapturada)
 
-            if(i > 0 + 9)
-            if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
-                if(casasEl[i+9].childElementCount == 0 && casasEl[i+9].classList == 'casa preta') {
-                    selecionaCaptura(i, 9)
-                }
-            }
+            //if(i > 0 + 7)
+            //if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
+            //    if(casasEl[i+7].childElementCount == 0 && casasEl[i+7].classList == 'casa preta') {
+            //        selecionaCaptura(i, 7)
+            //    }
+            //}   
+//
+            //if(i > 0 + 9)
+            //if(casasEl[i-9].childElementCount == 1 && casasEl[i-9].children[0].classList == 'peca-branca') {
+            //    if(casasEl[i+9].childElementCount == 0 && casasEl[i+9].classList == 'casa preta') {
+            //        selecionaCaptura(i, 9)
+            //    }
+            //}
             
         }
     }
@@ -484,7 +589,7 @@ const exibeVencedor = (vencedor) => {
 
 for(let i = 0; i < casasEl.length; ++i) {
     casasEl[i].addEventListener('click', () => {
-        if(jogo.captura.isTrue == true)
+        if(jogo.captura.isTrue == true && casasEl[i].childElementCount == 0)
             capturaPeca(i-jogo.captura.indexPecaCapturada)    
         
         selecionaPeca(i)

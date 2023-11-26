@@ -110,11 +110,21 @@ main {
 #jogador1-elemento {
     position: relative;
     top: -150px;
+    width: 100px;
+
+    text-align: center;
 }
 
 #jogador2-elemento {
     position: relative;
     top: 150px;
+    width: 100px;
+
+    text-align: center;
+}
+
+#abandonar {
+    width: 40px;
 }
 
 #index-casa {
