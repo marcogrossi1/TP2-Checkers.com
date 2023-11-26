@@ -147,12 +147,25 @@ const existePeca = (i) => {
 const retornaCorPeca = (i) => {
     if(existePeca(i) == true) {
         let pecaEl = casasEl[i].children[0]
-        
+
         if(pecaEl.classList == 'peca-preta')
             return 'preta'
-        
-        else 
+
+        else if(pecaEl.classList == 'peca-preta dama' || pecaEl.classList == 'dama')
+            return 'blackdama'
+
+        else if(pecaEl.classList == 'peca-branca')
             return 'branca'
+        
+        else if(pecaEl.classList == 'peca-branca dama' || pecaEl.classList == 'dama')
+            return 'whitedama'
+
+
+        //if(pecaEl.classList == 'peca-preta')
+        //    return 'preta'
+        //
+        //else if(pecaEl.classList == 'peca-branca')
+        //    return 'branca'
     }
 }
 
@@ -160,8 +173,10 @@ const atualizaMovimentosPossiveis = (i) => {
     jogo.movimentosPossiveis.length = 0
 
     if(retornaCorPeca(i) == 'branca') {
+        if(i < 63-7)
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
+            
         
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])
@@ -173,6 +188,42 @@ const atualizaMovimentosPossiveis = (i) => {
         
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
+    }
+
+    else if(retornaCorPeca(i) == 'blackdama') {
+        if(i > 0 + 7)
+        if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-7])
+        
+        if(i > 0 + 9)
+        if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-9])
+
+        if(i < 63-7)
+        if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+7])
+        
+        if(i < 63-9)
+        if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+9])    
+    }
+
+    else if(retornaCorPeca(i) == 'whitedama') {
+        if(i > 0 + 7)
+        if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-7])
+        
+        if(i > 0 + 9)
+        if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i-9])
+        
+        if(i < 63-7)
+        if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+7])
+        
+        if(i < 63-9)
+        if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
+            jogo.movimentosPossiveis.push(casasEl[i+9])    
     }
 }
 
@@ -221,7 +272,19 @@ const removeImagem = (i) => {
 const criaPeca = (e, corPeca) => {
     let imgEl = document.createElement('img')
     imgEl.src = `img/${corPeca}.png`
-    imgEl.classList.add(`peca-${corPeca}`)
+
+    if(corPeca == 'whitedama') {
+        imgEl.classList.add('peca-branca')
+        imgEl.classList.add('dama')
+    }
+
+    else if(corPeca == 'blackdama') {
+        imgEl.classList.add('peca-preta')
+        imgEl.classList.add('dama')
+    }
+        
+    else
+        imgEl.classList.add(`peca-${corPeca}`)
 
     e.appendChild(imgEl)
 }
@@ -263,11 +326,18 @@ const capturaPeca = (indexPecaComida) => {
 }
 
 const movimentaPeca = (i) => {
-    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1]) {
-        if(jogo.turno == 'branca' && jogo.selecionado.children[0].classList == 'peca-branca') {
+    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1] ||
+        casasEl[i] == jogo.movimentosPossiveis[2] || casasEl[i] == jogo.movimentosPossiveis[3]) {
+        if(jogo.turno == 'branca' && (jogo.selecionado.children[0].classList == 'peca-branca' || 
+        jogo.selecionado.children[0].classList == 'peca-branca dama')) {
+            if(jogo.selecionado.children[0].classList == 'peca-branca dama')
+                criaPeca(casasEl[i], 'whitedama')
+
+            else
+                criaPeca(casasEl[i], `branca`)
+
             removeSelecao()
             removeImagem(i)
-            criaPeca(casasEl[i], `branca`)
             
             jogo.turno = 'preta'
             jogo.contaMovimentos++
@@ -306,10 +376,16 @@ const movimentaPeca = (i) => {
             //}
         }
         
-        else if(jogo.turno == 'preta' && jogo.selecionado.children[0].classList == 'peca-preta') {
+        else if(jogo.turno == 'preta' && (jogo.selecionado.children[0].classList == 'peca-preta' ||
+        jogo.selecionado.children[0].classList == 'peca-preta dama')) {            
+            if(jogo.selecionado.children[0].classList == 'peca-preta dama')
+                criaPeca(casasEl[i], 'blackdama')
+
+            else
+                criaPeca(casasEl[i], `preta`)
+
             removeSelecao()
             removeImagem(i)                
-            criaPeca(casasEl[i], `preta`)
             
             jogo.turno = 'branca'
             jogo.contaMovimentos++
@@ -347,44 +423,43 @@ const criaDama = (i) => {
         }
 
     if(i == 62 || i == 60 || i == 58 || i == 56)
-        if(jogo.selecionado.children[0].classList == 'peca-branca') {
+        if(casasEl[i].children[0].classList == 'peca-branca') {
             casasEl[i].children[0].src = `img/whitedama.png`
-            casasEl[i].children[0].style.width = '50px'
             casasEl[i].children[0].classList.add('dama')
 
             jogo.dama.brancas.push(casasEl[i])
         }
 }
 
-const atualizaMovimentosPossiveisDama = (i) => {
-    if(casasEl[i].children[0].classList == 'peca-preta dama') {
-        jogo.movimentosPossiveis = [casasEl[i + 7], casasEl[i + 9]]
-    }
+//const atualizaMovimentosPossiveisDama = (i) => {
+//    if(casasEl[i].children[0].classList == 'peca-preta dama') {
+//        jogo.movimentosPossiveis = [casasEl[i + 7], casasEl[i + 9]]
+//    }
+//
+//    else if(casasEl[i].children[0].classList == 'peca-branca dama') {
+//        jogo.movimentosPossiveis = [casasEl[i - 7], casasEl[i - 9]]
+//    }
+//}
 
-    else if(casasEl[i].children[0].classList == 'peca-branca dama') {
-        jogo.movimentosPossiveis = [casasEl[i - 7], casasEl[i - 9]]
-    }
-}
-
-const movimentaDama = (i) => {
-    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1] || casasEl[i] == jogo.movimentosPossiveis[2] || casasEl[i] == jogo.movimentosPossiveis[3]) {
-        if(jogo.selecionado.children[0].classList == 'peca-preta dama') {
-            removeSelecao()
-            removeImagem()
-
-            criaPeca(casasEl[i], `blackdama`)
-
-            jogo.turno = 'branca'
-            jogo.contaMovimentos++
-
-            turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
-            contaBrancaEl.innerHTML = `<img src='img/brnca.png' width = 30px>: ${jogo.brancasCapturadas}`
-            contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
-            contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
-
-        }
-    }
-}
+//const movimentaDama = (i) => {
+//    if(casasEl[i] == jogo.movimentosPossiveis[0] || casasEl[i] == jogo.movimentosPossiveis[1] || casasEl[i] == jogo.movimentosPossiveis[2] || casasEl[i] == jogo.movimentosPossiveis[3]) {
+//        if(jogo.selecionado.children[0].classList == 'peca-preta dama') {
+//            removeSelecao()
+//            removeImagem()
+//
+//            criaPeca(casasEl[i], `blackdama`)
+//
+//            jogo.turno = 'branca'
+//            jogo.contaMovimentos++
+//
+//            turnoEl.innerHTML = `Turno: <img src='img/${jogo.turno}.png' width = 30px>`
+//            contaBrancaEl.innerHTML = `<img src='img/brnca.png' width = 30px>: ${jogo.brancasCapturadas}`
+//            contaPretaEl.innerHTML = `<img src='img/preta.png' width = 30px>: ${jogo.pretasCapturadas}`
+//            contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
+//
+//        }
+//    }
+//}
 
 const exibeVencedor = (vencedor) => {
     let audio = new Audio('audio/vitoria1.mp3')
@@ -425,7 +500,7 @@ for(let i = 0; i < casasEl.length; ++i) {
 
         // Iniciando a implementação da peça 'dama'
         criaDama(i)
-        atualizaMovimentosPossiveisDama(i)
-        movimentaDama(i)
+        //atualizaMovimentosPossiveisDama(i)
+        //movimentaDama(i)
     })
 }

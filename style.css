@@ -99,7 +99,7 @@ main {
 }
 
 .dama {
-    width: 50px;
+    width: 45px;
 }
 
 .desativado {
@@ -130,6 +130,9 @@ main {
 
     padding: 15px 25px;
     background-color: aliceblue;
+
+    border: 1px solid black;
+    box-shadow: 1px 1px 5px rgb(105, 105, 105);
 }
 
 #login > h2 {
@@ -199,6 +202,7 @@ main {
 
 #botao-fechar:hover {
     color: red;
+    cursor: pointer;
 }
 
 /* Tornando a aplicação responsiva */
