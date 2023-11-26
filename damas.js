@@ -100,7 +100,7 @@ let jogo = {
     movimentosPossiveis: [],
     contaMovimentos: 0,
     captura: {
-        indexPecaCapturada: -1,
+        indexPecaCapturada: [],
         isTrue: false
     },
     vencedor: '',
@@ -183,17 +183,18 @@ const retornaCorPeca = (i) => {
 
 const atualizaMovimentosPossiveis = (i) => {
     jogo.movimentosPossiveis.length = 0
+    jogo.captura.indexPecaCapturada.length = 0
 
     if(retornaCorPeca(i) == 'branca') {
         if(i < 63-7) {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
         
-        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
+        else if(i < 63 - 14 && casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
             if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+14])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = 7
+                jogo.captura.indexPecaCapturada.push(7)
             }
         }
 
@@ -201,11 +202,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])
 
-        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
+        else if(i < 64 - 18 && casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
             if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+18])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = 9
+                jogo.captura.indexPecaCapturada.push(9)
             }
         }
     }
@@ -215,11 +216,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
         
-        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
+        else if(i > 14 && casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
             if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-14])
                     jogo.captura.isTrue = true
-                    jogo.captura.indexPecaCapturada = -7
+                    jogo.captura.indexPecaCapturada.push(-7)
             }
         }
 
@@ -227,11 +228,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
 
-        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
+        else if(i > 18 && casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
             if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-18])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = -9
+                jogo.captura.indexPecaCapturada.push(-9)
             }
         }
     }
@@ -241,11 +242,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
 
-        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
+        else if(i > 14 && casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'branca' || retornaCorPeca(i-7) == 'whitedama'))
             if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-14])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = -7
+                jogo.captura.indexPecaCapturada.push(-7)
             }
         }
 
@@ -253,11 +254,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
 
-        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
+        else if(i > 18 && casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'branca' || retornaCorPeca(i-9) == 'whitedama'))
             if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-18])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = -9
+                jogo.captura.indexPecaCapturada.push(-9)
             }
         }
 
@@ -265,11 +266,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
         
-        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'branca' || retornaCorPeca(i+7) == 'whitedama'))
+        else if(i < 63 - 14 && casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'branca' || retornaCorPeca(i+7) == 'whitedama'))
             if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+14])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = 7
+                jogo.captura.indexPecaCapturada.push(7)
             }
         }
 
@@ -277,11 +278,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])    
 
-        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'branca' || retornaCorPeca(i+9) == 'whitedama'))
+        else if(i < 63 - 18 && casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'branca' || retornaCorPeca(i+9) == 'whitedama'))
             if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+18])
                     jogo.captura.isTrue = true
-                    jogo.captura.indexPecaCapturada = 9
+                    jogo.captura.indexPecaCapturada.push(9)
             }
         }
     }
@@ -291,11 +292,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-7].classList != 'casa branca' && casasEl[i-7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-7])
 
-        else if(casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'preta' || retornaCorPeca(i-7) == 'blackdama'))
+        else if(i > 14 && casasEl[i-7] != 'casa branca' && (retornaCorPeca(i-7) == 'preta' || retornaCorPeca(i-7) == 'blackdama'))
             if(casasEl[i-14].classList != 'casa branca' && casasEl[i-14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-14])
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = -7
+                jogo.captura.indexPecaCapturada.push(-7)
             }
         }
 
@@ -303,11 +304,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i-9].classList != 'casa branca' && casasEl[i-9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i-9])
 
-        else if(casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'preta' || retornaCorPeca(i-9) == 'blackdama'))
+        else if(i > 9 && casasEl[i-9] != 'casa branca' && (retornaCorPeca(i-9) == 'preta' || retornaCorPeca(i-9) == 'blackdama'))
             if(casasEl[i-18].classList != 'casa branca' && casasEl[i-18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i-18]) 
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = -9
+                jogo.captura.indexPecaCapturada.push(-9)
             }
         }
 
@@ -315,11 +316,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i+7].classList != 'casa branca' && casasEl[i+7].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+7])
         
-        else if(casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
+        else if(i < 63 - 14 && casasEl[i+7] != 'casa branca' && (retornaCorPeca(i+7) == 'preta' || retornaCorPeca(i+7) == 'blackdama'))
             if(casasEl[i+14].classList != 'casa branca' && casasEl[i+14].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+14])
                     jogo.captura.isTrue = true
-                    jogo.captura.indexPecaCapturada = 7
+                    jogo.captura.indexPecaCapturada.push(7)
                 }
         }
 
@@ -327,11 +328,11 @@ const atualizaMovimentosPossiveis = (i) => {
         if(casasEl[i+9].classList != 'casa branca' && casasEl[i+9].childElementCount == 0)
             jogo.movimentosPossiveis.push(casasEl[i+9])    
 
-        else if(casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
+        else if(i < 63 -18 && casasEl[i+9] != 'casa branca' && (retornaCorPeca(i+9) == 'preta' || retornaCorPeca(i+9) == 'blackdama'))
             if(casasEl[i+18].classList != 'casa branca' && casasEl[i+18].childElementCount == 0) {
                 jogo.movimentosPossiveis.push(casasEl[i+18]) 
                 jogo.captura.isTrue = true
-                jogo.captura.indexPecaCapturada = 9
+                jogo.captura.indexPecaCapturada.push(9)
             }
         }
     }
@@ -400,7 +401,7 @@ const criaPeca = (e, corPeca) => {
 }
 
 const selecionaCaptura = (indexPecaAtual, indexPecaOponente) => {
-    //jogo.captura.indexPecaCapturada = indexPecaOponente
+    //jogo.captura.indexPecaCapturada.push = indexPecaOponente
 
     selecionaPeca(indexPecaAtual)
         
@@ -425,7 +426,7 @@ const capturaPeca = (indexPecaComida) => {
     }
 
     jogo.captura.isTrue = false
-    jogo.captura.indexPecaCapturada = -1
+    jogo.captura.indexPecaCapturada.length = 0
 }
 
 const movimentaPeca = (i) => {
@@ -451,7 +452,8 @@ const movimentaPeca = (i) => {
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
             if(jogo.captura.isTrue == true)
-                selecionaCaptura(i, jogo.captura.indexPecaCapturada)
+                for(let j = 0; j < jogo.captura.indexPecaCapturada.length; ++j)
+                    selecionaCaptura(i, jogo.captura.indexPecaCapturada[j])
 
 
             //if(i < 63-7)
@@ -503,7 +505,8 @@ const movimentaPeca = (i) => {
             contadorMovimentos.innerHTML = `Movimentos: ${jogo.contaMovimentos}`
 
             if(jogo.captura.isTrue == true)
-                selecionaCaptura(i, jogo.captura.indexPecaCapturada)
+                for(let j = 0; j < jogo.captura.indexPecaCapturada.length; ++j)
+                    selecionaCaptura(i, jogo.captura.indexPecaCapturada[j])
 
             //if(i > 0 + 7)
             //if(casasEl[i-7].childElementCount == 1 && casasEl[i-7].children[0].classList == 'peca-branca') {
@@ -595,7 +598,9 @@ const exibeVencedor = (vencedor) => {
 for(let i = 0; i < casasEl.length; ++i) {
     casasEl[i].addEventListener('click', () => {
         if(jogo.captura.isTrue == true && casasEl[i].childElementCount == 0)
-            capturaPeca(i-jogo.captura.indexPecaCapturada)    
+            for(let j = 0; j < jogo.captura.indexPecaCapturada.length; ++j)
+                if(casasEl[i - 2*jogo.captura.indexPecaCapturada[j]] === jogo.selecionado)
+                    capturaPeca(i-jogo.captura.indexPecaCapturada[j])    
         
         selecionaPeca(i)
         movimentaPeca(i)
@@ -610,7 +615,5 @@ for(let i = 0; i < casasEl.length; ++i) {
 
         // Iniciando a implementação da peça 'dama'
         criaDama(i)
-        //atualizaMovimentosPossiveisDama(i)
-        //movimentaDama(i)
     })
 }
