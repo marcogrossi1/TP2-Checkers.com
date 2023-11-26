@@ -43,7 +43,12 @@ botaoJogarEl.addEventListener('click', () => {
     let botaoAbandonarEl = document.querySelectorAll('#abandonar')
 
     for(let i = 0; i < botaoAbandonarEl.length; ++i)
-        botaoAbandonarEl[i].addEventListener('click', () => (i == 0) ? exibeVencedor('preta') : exibeVencedor('branca'))
+        botaoAbandonarEl[i].addEventListener('click', () => {
+            if(i == 0 && jogo.turno == 'branca')
+                exibeVencedor('preta')
+            else if(jogo.turno == 'preta')
+                exibeVencedor('branca')
+            })
     
 })
 
@@ -109,7 +114,7 @@ let jogo = {
 const criaTabuleiro = (i) => {
     let imgEl = document.createElement('img')
 
-    if(i < 15) {
+    if(i < 24) {
         imgEl.src = 'img/branca.png'
         imgEl.classList.add('peca-branca')
     }
@@ -122,10 +127,10 @@ const criaTabuleiro = (i) => {
 }
 
 for(let i = 0; i < casasEl.length; ++i) {
-    if((i < 15) && (casasEl[i].classList == 'casa preta'))
+    if((i < 24) && (casasEl[i].classList == 'casa preta'))
         criaTabuleiro(i);
 
-    else if((i > 48 && i < 63) && (casasEl[i].classList == 'casa preta'))
+    else if((i > 39 && i < 63) && (casasEl[i].classList == 'casa preta'))
         criaTabuleiro(i);
 }
 
@@ -595,11 +600,11 @@ for(let i = 0; i < casasEl.length; ++i) {
         selecionaPeca(i)
         movimentaPeca(i)
 
-        if(jogo.brancasCapturadas == 8) {
+        if(jogo.brancasCapturadas == 12) {
             exibeVencedor('preta')
         }
 
-        else if(jogo.pretasCapturadas == 8) {
+        else if(jogo.pretasCapturadas == 12) {
             exibeVencedor('branca')
         }
 
