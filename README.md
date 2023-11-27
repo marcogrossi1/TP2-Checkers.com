@@ -52,6 +52,9 @@ Este projeto foi criado para atender às demandas da disciplina 'Laboratório de
     - Durante toda a execução do projeto, foi utilizado a combinação Git-Github para manter um backup e registrar mudanças na página.
     ![Página que mostra os commits dos dias 25/11 e 26/11](img/screenshots/commits_git.png)
 
+4. *Arte da página
+    - A arte da pagina (peças e logo) foi toda elaborada e criada pelo grupo.
+
 ## To-do
 * Adicionar empate caso haja repetição de movimentos (ou seja impossível concluir o jogo);
 * Adicionar métodos para capturar peças em cadeia (por meio de recursividade?);
