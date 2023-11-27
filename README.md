@@ -21,8 +21,7 @@ Este projeto foi criado para atender às demandas da disciplina 'Laboratório de
 * Distribuição das peças dinamicamente (via _JavaScript_);
 * Painel de informações com 'Turno', 'Quantidade de peças capturadas' e 'Movimentos';
 * Botão 'abandonar', que termina o jogo;
-    - 'Abandonar' só pode ser ativado no turno do jogador;
-    ![Imagem do botão abandonar](img/abandonar.png)
+    - 'Abandonar' só pode ser ativado no turno do jogador; <img src = 'img/abandonar.png' width = '40px'>
 * Janela 'sobre', que traz informações sobre os autores;
 * Janela 'configurações', que permite mudar a cor do tabuleiro;
  <img src='img/screenshots/aba_config.png' height = '500px'>
