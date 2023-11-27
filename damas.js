@@ -103,11 +103,7 @@ let jogo = {
         indexPecaCapturada: [],
         isTrue: false
     },
-    vencedor: '',
-    dama: {
-        pretas: [],
-        brancas: []
-    }
+    vencedor: ''
 }
 
 // Criando situação de início de jogo, com as peças dispostas pelo tabuleiro
